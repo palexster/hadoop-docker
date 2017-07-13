@@ -25,3 +25,13 @@ fi
 if [[ $1 == "-bash" ]]; then
   /bin/bash
 fi
+
+sleep 30
+
+for i in $(seq 1 10);
+do
+    cd $HADOOP_PREFIX
+    (time bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.1.jar grep input output 'dfs[a-z.]+' 2> /dev/null >/dev/null) &>> /tmp/test-results/hadoop-$i.log
+    bin/hdfs dfs -rm output/*
+    bin/hdfs dfs -rmdir output
+done
